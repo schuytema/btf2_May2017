@@ -25,13 +25,15 @@ foreach ($interest_group_members as $member)
       <a href=<?php echo '"' . base_url() . 'main/user_profile/' . $member['FK_User_Id'] . '">' . $user_info_temp['first_name'] . ' ' . $user_info_temp['last_name'];?></a>
       <br/>
       <?php
-      if($is_admin && !$this->m_btf2_interest_groups->is_group_admin($group['PK_Interest_Group_Id'],$user_info_temp['id']))
+      if($this->m_btf2_interest_groups->is_group_admin($group['PK_Interest_Group_Id'],$user_info_temp['id']))
       {
+        echo '(<i>Admin</i>)';
+      } else if($is_admin) {
         echo '<a href="'.base_url().'main/make_group_admin/'.$group['PK_Interest_Group_Id'].'/'.$user_info_temp['id'].'">';
           echo 'Make Admin';
         echo '</a>';
       } else {
-        echo '(<i>Admin</i>)';
+        echo '</br>';
       }?>
     </div>
     <?php

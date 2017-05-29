@@ -51,7 +51,7 @@ if($feed!=null)
           echo '<h3 style="display:inline-block">'.$element['Title'].'</h3>';
           if ($is_admin || $element['FK_User_Id'] == $user_info->id)
           {?>
-            <a onclick="return confirm('<?php echo $confirm;?>');" href="<?php echo base_url();?>main/delete_feed_post/<?php echo $element['PK_Interest_Group_Feed_Id'];?>" type="button" class="btn btn-default btn-xs" style="float:right;display:inline-block;"><?php
+            <a onclick="return confirm('<?php echo $confirm;?>');" href="<?php echo base_url();?>main/delete_feed_post/<?php echo $element['PK_Interest_Group_Feed_Id'] .'/'. $element['FK_Interest_Group_Id'];?>" type="button" class="btn btn-default btn-xs" style="float:right;display:inline-block;"><?php
               echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
             echo '</a>';
           }
@@ -94,6 +94,7 @@ if($feed!=null)
               <span id="heart" class="glyphicon glyphicon-heart" style="color:#CC1111;"aria-hidden="true"></span><?php
             }?>
             <span id="likes" style="color:#888888"><?php echo ' '.count($likes).' ';?>likes</span>
+            <span id="views" style="color:#888888; float:right;text-align:right;margin-right:5px;z-index:-1;"><?php echo $element['Feed_Views'].' view'.($element['Feed_Views'] != 1?'s':'');?></span>
           </div>
         </div>
         </br><?php

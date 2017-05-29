@@ -230,14 +230,33 @@ class M_btf2_interest_groups extends CI_Model{
         foreach ($results as $user_id)
         {
           $id = $user_id['FK_User_Id'];
-          $groups = $this->db->query("SELECT interest_group_name FROM users WHERE id = $id");
+          $groups = $this->db->query("SELECT interest_group_name, notification FROM users WHERE id = $id");
           $groups = $groups->result_array();
+          $notification = $groups[0]['notification'];
           $groups = $groups[0]['interest_group_name'];
           $subject = "New ".$groups." Feed";
           $message = "There is a new post in ".$group_name;
+          if($notification == 'email')
+          {
+            $message = $message.". Click the link below to view the post:\r\n";
+            $message = $message.base_url().'main/interest_groups/'.$group_id;
+          }
           $this->m_btf2_users->notify($id, $message, $subject);
         }
       }
+    }
+
+    function increase_feed_views($feed_id)
+    {
+      $views = $this->db->query("SELECT Feed_Views FROM btf2_interest_group_feed WHERE PK_Interest_Group_Feed_Id = $feed_id");
+      $views = $views->result_array()[0]['Feed_Views'] + 1;
+      $this->db->query("UPDATE btf2_interest_group_feed SET Feed_Views = $views WHERE PK_Interest_Group_Feed_Id = $feed_id");
+    }
+
+    function get_group_id_from_post($feed_id)
+    {
+      $query = $this->db->query("SELECT FK_Interest_Group_Id FROM btf2_interest_group_feed WHERE PK_Interest_Group_Feed_Id = $feed_id");
+      return $query->result_array()[0]['FK_Interest_Group_Id'];
     }
 
     function get_all_interest_groups($user_id)

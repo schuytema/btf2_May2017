@@ -512,7 +512,7 @@ class Auth extends CI_Controller {
                 //'company'    => $this->input->post('company'),
                 'phone'      => $phone,
 								'phone_carrier' => $this->input->post('phone_carrier'),
-								'notification' => "phone";
+								'notification' => "phone",
             );
         }
         if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data))
@@ -570,7 +570,7 @@ class Auth extends CI_Controller {
                 'type'  => 'text',
                 'value' => $this->form_validation->set_value('phone'),
             );
-						$this->date['phone_carrier'] = array(
+						$this->data['phone_carrier'] = array(
 								'name'  => 'phone_carrier',
 								'id'		=> 'phone_carrier',
 								'type'	=> 'text',

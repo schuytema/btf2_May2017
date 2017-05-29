@@ -59,7 +59,6 @@ class M_btf2_users extends CI_Model{
         $carrier = $result[0]['phone_carrier'];
         if($phone != "0" || $phone != NULL)
         {
-          echo $text;
           $email = $phone.'@'.$this->m_btf2_users->carrier_email($carrier);
           //$subject = "BTF2 Notifications";
           $from = 'BTF Notification';//."\r\n";

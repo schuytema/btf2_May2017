@@ -43,7 +43,7 @@ $group = $this->m_btf2_interest_groups->get_interest_group($group_id);
         if ($is_admin || $post['FK_User_Id'] == $user_info->id)
         {
           $confirm = 'Are you sure you want to delete this post?';?>
-          <a onclick="return confirm('<?php echo $confirm;?>');" href="<?php echo base_url();?>main/delete_feed_post/<?php echo $post['PK_Interest_Group_Feed_Id'];?>" type="button" class="btn btn-default btn-xs" style="float:right;display:inline-block;"><?php
+          <a onclick="return confirm('<?php echo $confirm;?>');" href="<?php echo base_url();?>main/delete_feed_post/<?php echo $post['PK_Interest_Group_Feed_Id'] .'/'. $post['FK_Interest_Group_Id'];?>" type="button" class="btn btn-default btn-xs" style="float:right;display:inline-block;"><?php
             echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
           echo '</a>';
         }
@@ -79,12 +79,12 @@ $group = $this->m_btf2_interest_groups->get_interest_group($group_id);
         } else if(array_search($user_info->id, $likes)=== false) {?>
           <a id="likeButton" href="<?php echo base_url().'main/add_feed_like/'.$user_info->id.'/'.$feed_id.'/'.$group['PK_Interest_Group_Id'].'/post';?>" type="button" style="background-color:transparent;border:0px;text-decoration:none;">
             <span id="heart" class="glyphicon glyphicon-heart" style="color:#505050;"aria-hidden="true"></span>
-            <!--div id="addLike"><?php if($add_like){$this->m_btf2_interest_groups->add_feed_like($user_info->id, $feed_id);}?></div-->
           </a><?php
         } else {?>
           <span id="heart" class="glyphicon glyphicon-heart" style="color:#CC1111;"aria-hidden="true"></span><?php
         }?>
         <span id="likes" style="color:#888888"><?php echo ' '.count($likes).' ';?>likes</span>
+        <span id="views" style="color:#888888; float:right;text-align:right;margin-right:5px;z-index:-1;"><?php echo $post['Feed_Views'].' view'.($post['Feed_Views'] != 1?'s':'');?></span>
       </div>
       <?php include 'interest_group_post_comments.php';?>
       <form id="form" action="<?php echo base_url().'main/add_feed_comment/'.$feed_id.'/'.$group_id;?>" method="post">

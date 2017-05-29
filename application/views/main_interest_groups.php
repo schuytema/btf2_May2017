@@ -29,17 +29,17 @@ if (isset($_SESSION['time']))
   <?php
   if($group != NULL)
   {
-    echo '<span style="font-size:2em;">'.$group['Name'].'</span>';
     if(!$group_member)
     {?>
-      <a role="button" class="btn btn-primary btn-sm" href="<?php echo base_url().'main/join_group/'.$group['PK_Interest_Group_Id'].'/'.$user_info->id;?>" style="float:right;z-index:2;">
+      <a role="button" class="btn btn-primary btn-xs" href="<?php echo base_url().'main/join_group/'.$group['PK_Interest_Group_Id'].'/'.$user_info->id;?>" style="float:right;z-index:2;margin-top:-30px;">
         Join
       </a><?php
     } else if(!$this->m_btf2_interest_groups->is_default_group($group['PK_Interest_Group_Id'], $user_info->id)) {?>
-      <a role="button" class="btn btn-primary btn-sm" href="<?php echo base_url().'main/make_default_group/'.$group['PK_Interest_Group_Id'].'/'.$user_info->id;?>" style="float:right;">
+      <a role="button" class="btn btn-primary btn-xs" href="<?php echo base_url().'main/make_default_group/'.$group['PK_Interest_Group_Id'].'/'.$user_info->id;?>" style="float:right;margin-top:-30px;">
         Set Default
       </a><?php
     }
+    echo '<span style="font-size:2em;">'.$group['Name'].'</span>';
     echo '<p>'.$group['Description'].'</p>';
     ?>
     <div class="container" style="width:100%;margin-top:5px;">
@@ -54,14 +54,26 @@ if (isset($_SESSION['time']))
           </br>
           <?php
           if($group_member)
-          {?>
-            <a role="button" class="btn btn-primary" href="<?php echo base_url().'main/add_content_to_group/'.$group['PK_Interest_Group_Id'];?>">
+          {
+            if($this->m_btf2_interest_groups->is_group_admin($group['PK_Interest_Group_Id'], $user_info->id))
+            {
+              $link = base_url().'main/add_content_to_group/'.$group['PK_Interest_Group_Id'];
+            } else {
+              $group_id = $group['PK_Interest_Group_Id'];
+              $admin = $this->db->query("SELECT FK_User_Id FROM btf2_interest_group WHERE PK_Interest_Group_Id = '$group_id'");
+              $admin = $admin->result_array()[0]['FK_User_Id'];
+              $admin_email = $this->db->query("SELECT email FROM users WHERE id = $admin");
+              $admin_email = $admin_email->result_array()[0]['email'];
+              $link = 'mailto:'.$admin_email;
+            }
+            ?>
+            <a role="button" class="btn btn-primary btn-sm" href="<?php echo $link;?>">
               Add Content
             </a>
             </br></br>
             <?php include 'interest_group_feed.php';
           } else {
-            echo 'You are not a member of this group to view its content. Request to join!';?>
+            echo 'You are not a member of this group. To view its content, request to join.';?>
             </br>
           <?php
           } ?>

@@ -15,7 +15,7 @@
         if($comment['FK_User_Id'] == $user_info->id || $is_admin)
         {?>
           <div style="display:inline-block;float:right;text-align:right;margin-right:0px;margin-left:auto;">
-            <a onclick="return confirm('Are you sure you want to delete this comment?');" href="<?php echo base_url();?>main/delete_feed_comment/<?php echo $comment['PK_Comment_Id'];?>" type="button" style="color:#333333;">
+            <a onclick="return confirm('Are you sure you want to delete this comment?');" href="<?php echo base_url();?>main/delete_feed_comment/<?php echo $comment['PK_Comment_Id'].'/'.$comment['FK_Feed_Id'];?>" type="button" style="color:#333333;">
               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </a>
           </div><?php

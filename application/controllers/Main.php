@@ -1147,7 +1147,7 @@ class Main extends CI_Controller {
 				$data['group_id'] = $group_id;
 				$data['post_id'] = $post_id;
 				$data['autofocus'] = $sourse == 'cmt'? true : false;
-
+				$this->m_btf2_interest_groups->increase_feed_views($post_id);
 				$this->load->view('main_head',$data);
 				$this->load->view('interest_group_post', $data);
 				$this->load->view('main_foot');
@@ -1303,23 +1303,24 @@ class Main extends CI_Controller {
 				}
 			}
 
-			function delete_feed_post($feed_id)
+			function delete_feed_post($feed_id,$group_id)
 			{
 				if($this->ion_auth->logged_in())
 				{
 					$this->m_btf2_interest_groups->delete_feed_post($feed_id);
-					redirect('main/interest_groups');
+					redirect('main/interest_groups/'.$group_id);
 				} else {
 					redirect('auth/login');
 				}
 			}
 
-			function delete_feed_comment($comment_id)
+			function delete_feed_comment($comment_id, $post_id)
 			{
 				if($this->ion_auth->logged_in())
 				{
 					$this->m_btf2_interest_groups->delete_feed_comment($comment_id);
-					redirect('main/interest_groups');
+					$group_id = $this->m_btf2_interest_groups->get_group_id_from_post($post_id);
+					redirect('main/interest_group_post/'.$group_id.'/'.$post_id);
 				} else {
 					redirect('auth/login');
 				}
