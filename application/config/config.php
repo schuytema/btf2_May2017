@@ -24,7 +24,8 @@ date_default_timezone_set('America/New_York');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://63.247.137.231/~btffellows/';
+//$config['base_url'] = 'http://63.247.137.231/~btffellows/';
+$config['base_url'] = 'http://breakthroughfoundry.com/';
 
 /*
 |--------------------------------------------------------------------------

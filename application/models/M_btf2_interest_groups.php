@@ -127,6 +127,11 @@ class M_btf2_interest_groups extends CI_Model{
       $this->db->query("UPDATE btf2_interest_group_members SET Is_Admin = 'yes' WHERE FK_Interest_Group_Id = $group_id AND FK_User_Id = $user_id");
     }
 
+    function remove_admin($group_id, $user_id)
+    {
+      $this->db->query("UPDATE btf2_interest_group_members SET Is_Admin = 'no' WHERE FK_Interest_Group_Id = $group_id AND FK_User_Id = $user_id");
+    }
+
     function add_content_to_group($group_id)
     {
       $user_id = $this->pcs_utility->id_clean($this->input->post('FK_User_Id'));
@@ -283,6 +288,12 @@ class M_btf2_interest_groups extends CI_Model{
     function is_group_admin($group_id, $user_id)
     {
       $query = $this->db->query("SELECT PK_Interest_Group_Member_Id FROM btf2_interest_group_members WHERE FK_Interest_Group_Id = $group_id AND FK_User_Id = $user_id AND Is_Admin = 'yes'");
+      return $query->num_rows();
+    }
+
+    function is_group_creator($group_id, $user_id)
+    {
+      $query = $this->db->query("SELECT PK_Interest_Group_Id FROM btf2_interest_group WHERE PK_Interest_Group_Id = $group_id AND FK_User_Id = $user_id");
       return $query->num_rows();
     }
 

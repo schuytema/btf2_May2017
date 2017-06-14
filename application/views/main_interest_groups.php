@@ -44,13 +44,13 @@ if (isset($_SESSION['time']))
     ?>
     <div class="container" style="width:100%;margin-top:5px;">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#feed" style="padding:7px;">Feed</a></li>
-        <li><a data-toggle="tab" href="#people" style="padding:7px;">People</a></li>
-        <li><a data-toggle="tab" href="#projects" style="padding:7px;">Projects</a></li>
-        <li><a data-toggle="tab" href="#more" style="padding:7px;">More Groups</a></li>
+        <li <?php if($tab == 'feed') {echo 'class="active"';}?>><a data-toggle="tab" href="#feed" style="padding:7px;">Feed</a></li>
+        <li <?php if($tab == 'people') {echo 'class="active"';}?>><a data-toggle="tab" href="#people" style="padding:7px;">People</a></li>
+        <li <?php if($tab == 'projects') {echo 'class="active"';}?>><a data-toggle="tab" href="#projects" style="padding:7px;">Projects</a></li>
+        <li <?php if($tab == 'more') {echo 'class="active"';}?>><a data-toggle="tab" href="#more" style="padding:7px;">More Groups</a></li>
       </ul>
       <div class="tab-content">
-        <div id="feed" class="tab-pane fade in active">
+        <div id="feed" class="tab-pane fade <?php if($tab == 'feed') {echo 'in active';}?>">
           </br>
           <?php
           if($group_member)
@@ -78,7 +78,7 @@ if (isset($_SESSION['time']))
           <?php
           } ?>
         </div> <!-- End #feed -->
-        <div id="people" class="tab-pane fade">
+        <div id="people" class="tab-pane fade <?php if($tab == 'people') {echo 'in active';}?>">
           <?php if($group_member)
           {?>
             </br>
@@ -92,11 +92,11 @@ if (isset($_SESSION['time']))
           </br>
           <?php include 'interest_group_people.php';?>
         </div> <!-- End #people -->
-        <div id="projects" class="tab-pane fade">
+        <div id="projects" class="tab-pane fade <?php if($tab == 'projects') {echo 'in active';}?>">
           </br>
           <?php include 'interest_group_projects.php';?>
         </div> <!-- End #projects -->
-        <div id="more" class="tab-pane fade">
+        <div id="more" class="tab-pane fade <?php if($tab == 'more') {echo 'in active';}?>">
           </br>
           <a href=<?php echo '"'.base_url().'main/create_interest_group"';?> role="button" class="btn btn-primary btn-sm" style="float:left;display:inline-block;margin-left:2%;">
             Add <?php echo $user_info->interest_group_name;?>

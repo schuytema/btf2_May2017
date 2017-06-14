@@ -1017,7 +1017,7 @@ class Main extends CI_Controller {
 				}
 			}
 
-			function interest_groups($group_id = 0)
+			function interest_groups($group_id = 0, $group_tab = 'feed')
 			{
 				if($this->ion_auth->logged_in())
 				{
@@ -1025,6 +1025,7 @@ class Main extends CI_Controller {
 					$data['page'] = 'interest_group';
 					$data['in_project'] = false;
 					$data['group_id'] = $group_id;
+					$data['tab'] = $group_tab;
 
 					$this->load->view('main_head', $data);
 					$this->load->view('main_interest_groups', $data);
@@ -1180,7 +1181,7 @@ class Main extends CI_Controller {
 				if($this->ion_auth->logged_in())
 				{
 					$this->m_btf2_interest_groups->connect_project_to_group($group_id);
-					redirect('main/interest_groups/'.$group_id);
+					redirect('main/interest_groups/'.$group_id.'/projects');
 				} else {
 					redirect('auth/login');
 				}
@@ -1286,7 +1287,7 @@ class Main extends CI_Controller {
 				if($this->ion_auth->logged_in())
 				{
 					$this->m_btf2_interest_groups->remove_group_project($group_id, $project_id);
-					redirect('main/interest_groups/'.$group_id);
+					redirect('main/interest_groups/'.$group_id.'/projects');
 				} else {
 					redirect('auth/login');
 				}
@@ -1333,7 +1334,7 @@ class Main extends CI_Controller {
 					if($this->m_btf2_interest_groups->is_group_admin($group_id, $this->ion_auth->user()->row()->id))
 					{
 						$this->m_btf2_interest_groups->make_admin($group_id, $user_id);
-						redirect('main/interest_groups/'.$group_id.'#people');
+						redirect('main/interest_groups/'.$group_id.'/people');
 					} else {
 						redirect('main/interest_groups');
 					}
@@ -1341,6 +1342,23 @@ class Main extends CI_Controller {
 					redirect('auth/login');
 				}
 			}
+
+			function remove_group_admin($group_id, $user_id)
+			{
+				if($this->ion_auth->logged_in())
+				{
+					if($this->m_btf2_interest_groups->is_group_creator($group_id, $this->ion_auth->user()->row()->id))
+					{
+						$this->m_btf2_interest_groups->remove_admin($group_id, $user_id);
+						redirect('main/interest_groups/'.$group_id.'/people');
+					} else {
+						redirect('main/interest_groups');
+					}
+				} else {
+					redirect('auth/login');
+				}
+			}
+
 			function make_default_group($group_id, $user_id)
 			{
 				if($this->ion_auth->logged_in())

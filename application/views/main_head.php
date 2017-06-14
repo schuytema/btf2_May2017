@@ -128,7 +128,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a href="<?php echo base_url();?>main/project_list">Projects</a>
           </li>
           <li <?php if($page == 'interest_groups'){echo 'class="active"';}?>>
-            <a href="<?php echo base_url();?>main/interest_groups"><?php echo $groups_name.'s';?></a>
+            <a href="<?php echo base_url();?>main/interest_groups"><?php echo $groups_name;?></a>
           </li>
           <?php
             if ($page == "chat_list" || $page == "add_channel")
