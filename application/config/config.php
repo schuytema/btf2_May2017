@@ -25,7 +25,8 @@ date_default_timezone_set('America/New_York');
 |
 */
 //$config['base_url'] = 'http://63.247.137.231/~btffellows/';
-$config['base_url'] = 'http://breakthroughfoundry.com/';
+//$config['base_url'] = 'http://breakthroughfoundry.com/';
+$config['base_url'] = 'http://63.247.137.231/~btfdev2/';
 
 /*
 |--------------------------------------------------------------------------
