@@ -1,10 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-if(!isset($_SESSION['time']))
-{
-  session_start();
-}
-$timezone = $_SESSION['time'];
 ?><!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +12,7 @@ $timezone = $_SESSION['time'];
       }
 
         $(document).ready(function() {
-        if("<?php echo $timezone; ?>".length==0){
+        if(<?php echo !isset($_SESSION['time']); ?>){
             var visitortime = new Date();
             var visitortimezone = "GMT " + -visitortime.getTimezoneOffset()/60;
             $.ajax({
