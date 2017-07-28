@@ -12,14 +12,16 @@ if (isset($_SESSION['time']))
 {
   $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
 } else {
-  $query = $this->db->query("SELECT last_login FROM users WHERE id = $user_info->id");
+  session_start();
+  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+  /*$query = $this->db->query("SELECT last_login FROM users WHERE id = $user_info->id");
   if ($query->num_rows())
   {
     $last_login = $query->result_array();
     $last_login = $last_login[0]['last_login'];
   }
   $_SESSION['last_login'] = $last_login;
-  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['last_login'])))));
+  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['last_login'])))));*/
 }
 $group = $this->m_btf2_interest_groups->get_interest_group($group_id);
 ?>

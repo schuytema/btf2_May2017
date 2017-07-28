@@ -1,4 +1,11 @@
 <?php
+	if (isset($_SESSION['time']))
+	{
+		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+	} else {
+		session_start();
+		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+	}
 	$user_info = $this->ion_auth->user()->row();
 	$user_name = $user_info->first_name.' '.$user_info->last_name;
 	$project_info = $this->m_btf2_projects->get_project_info($project_id);

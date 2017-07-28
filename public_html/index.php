@@ -97,7 +97,7 @@ switch (ENVIRONMENT)
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = '/home/btffellows/system';
+	$system_path = '/home/btfdev2/system';
 
 /*
  *---------------------------------------------------------------
@@ -114,7 +114,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '/home/btffellows/application';
+	$application_folder = '/home/btfdev2/application';
 
 /*
  *---------------------------------------------------------------

@@ -8,7 +8,9 @@
 		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
 	}
 	else {
-		$query = $this->db->query("SELECT last_login FROM users WHERE id = $user_info->id");
+		session_start();
+		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+		/*$query = $this->db->query("SELECT last_login FROM users WHERE id = $user_info->id");
 		if ($query->num_rows())
 		{
 			$results = $query->result_array();
@@ -18,7 +20,8 @@
 			}
 		}
 		$_SESSION['last_login'] = $last_login;
-		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['last_login'])))));
+		$gmt = gmdate("Y M D H:i:s");
+		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['last_login'])))));*/
 	}
 	if (substr($channel_name, 0, 1) == '-') // private chats are channels preceeded by another '-'
 	{

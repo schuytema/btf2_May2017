@@ -10,7 +10,9 @@
 		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
 	}
 	else {
-		$query = $this->db->query("SELECT last_login FROM users WHERE username = '$username'");
+    session_start();
+		$time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+    /*$query = $this->db->query("SELECT last_login FROM users WHERE username = '$username'");
 		if ($query->num_rows())
 		{
 			$results = $query->result_array();
@@ -20,7 +22,7 @@
 			}
 		}
 		$_SESSION['last_login'] = $last_login;
-    $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+    $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));*/
 	}
   $g = 1;
   $m = 1;
@@ -144,7 +146,7 @@
                         <td align="left">
                           <a data-toggle="modal" data-target="#myModal<?php echo $m; ?>"><?php echo $tasks[$i-1]['Task_Name']?></a><?php
                           $st = $tasks[$i-1]['Update_Date']; //  a timestamp
-                          $time = new DateTime("@$st"); 
+                          $time = new DateTime("@$st");
     											$time->setTimezone($time_zone);?>
                           <p style="text-align:left; font-style:italic; font-size:x-small; color:#999999"><?php echo $tasks[$i-1]['Status'] . ' - last updated ' . $time->format('F d, Y') . ' at ' . $time->format('H:i'); ;?></p>
                         </td>

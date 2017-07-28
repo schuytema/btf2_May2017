@@ -7,7 +7,9 @@ if (isset($_SESSION['time']))
   $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
 }
 else {
-  $query = $this->db->query("SELECT last_login FROM users WHERE username = '$username'");
+  session_start();
+  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+  /*$query = $this->db->query("SELECT last_login FROM users WHERE username = '$username'");
   if ($query->num_rows())
   {
     $results = $query->result_array();
@@ -17,7 +19,7 @@ else {
     }
   }
   $_SESSION['last_login'] = $last_login;
-  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));
+  $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));*/
 }
 
 if ($user_info->id == substr($uri, 24))

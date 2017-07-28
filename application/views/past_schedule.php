@@ -1,4 +1,3 @@
-<?php $time_zone = new DateTimeZone('Etc/' . str_replace(' ', '', str_replace('!', '-', str_replace('-', '+', str_replace('+', '!', $_SESSION['time'])))));?>
 <div class="panel panel-default" id="panel<?php echo $p_id;?>p">
 	<div class="panel-heading">
 		<h4 class="panel-title">

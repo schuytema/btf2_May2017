@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-@$timezone = $_SESSION['time'];
+if(!isset($_SESSION['time']))
+{
+  session_start();
+}
+$timezone = $_SESSION['time'];
 ?><!DOCTYPE html>
 <html lang="en">
   <head>
