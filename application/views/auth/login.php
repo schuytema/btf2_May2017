@@ -38,7 +38,7 @@
       <p>
         <a href="forgot_password"><?php echo lang('login_forgot_password');?></a>
         </br>
-        <a href="create_user">Create an account</a>
+        <a href="create_user">Sign Up and Try for Free!</a>
       </p>
     </div>
   </div>

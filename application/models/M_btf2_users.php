@@ -86,7 +86,8 @@ class M_btf2_users extends CI_Model{
       Nextel: $phone@messaging.nextel.com
       US Cellular: $phone@email.uscc.net
       */
-      switch ($carrier) {
+      switch ($carrier)
+      {
         case 'ATT':
           return 'txt.att.net';
           break;
@@ -125,6 +126,58 @@ class M_btf2_users extends CI_Model{
 
       $this->db->where('id', $user_id);
       $this->db->update('users', $data);
+    }
+
+    function user_level($user_id)
+    {
+      $query = $this->db->query("SELECT user_level FROM users WHERE id = $user_id");
+      if($query->num_rows())
+      {
+        return $query->result_array()[0]['user_level'];
+        /*switch ($query)
+        {
+          case 0:
+            return 'Free';
+            break;
+          case 1:
+            return 'Mid-level';
+            break;
+          case 2:
+            return 'Premium';
+            break;
+        }*/
+      }
+      return 0;
+    }
+
+    function convert_level_to_string($user_level)
+    {
+      switch ($user_level)
+      {
+        case 0:
+          return 'Free';
+          break;
+        case 1:
+          return 'Mid-level';
+          break;
+        case 2:
+          return 'Premium';
+          break;
+      }
+    }
+
+    function increment_project_count()
+    {
+      $user_info = $this->ion_auth->user()->row();
+      $project_count = $user_info->projects_owned + 1;
+      $this->db->query("UPDATE users SET projects_owned = $project_count WHERE id = $user_info->id");
+    }
+
+    function decrement_project_count()
+    {
+      $user_info = $this->ion_auth->user()->row();
+      $project_count = $user_info->projects_owned - 1;
+      $this->db->query("UPDATE users SET projects_owned = $project_count WHERE id = $user_info->id");
     }
 }
 /* End of file m_btf2_users.php */

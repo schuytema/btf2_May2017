@@ -6,7 +6,7 @@ class M_btf2_projects extends CI_Model{
         parent::__construct();
     }
 
-    function new_project ($project_id)
+    function new_project ($project_id = 0)
     {
       $Project_Pages = $this->input->post('Available_Pages');
       if($Project_Pages == null)
@@ -23,39 +23,40 @@ class M_btf2_projects extends CI_Model{
 
     	if($project_id == 0)
     	{
+        $user_info = $this->ion_auth->user()->row();
     		$data['Invite_Key'] = $this->pcs_utility->random_string();
-    	    $this->db->insert('btf2_projects', $data);
-    	    $new_project_id = $this->db->insert_id();
-    	    //add creator as project memeber
-    	    $user_info = $this->ion_auth->user()->row();
-    	    $data_member = array(
-    	        'FK_Project_Id' => $new_project_id,
-    	        'FK_User_Id' => $user_info->id,
-    	        'Is_Admin' => 'yes',
-    	    );
-    	    $this->db->insert('btf2_project_members', $data_member);
-    	    //create general channel
-    	    $data_channel = array(
-    	        'FK_Project_Id' => $new_project_id,
-    	        'Channel_Name' => '#general',
-    	        'Members' => 'a:1:{i:0;s:1:"'.$user_info->id.'";}'
-    	    );
-    	    $this->db->insert('btf2_channels', $data_channel);
+  	    $this->db->insert('btf2_projects', $data);
+  	    $new_project_id = $this->db->insert_id();
+  	    //add creator as project memeber
+  	    $data_member = array(
+  	        'FK_Project_Id' => $new_project_id,
+  	        'FK_User_Id' => $user_info->id,
+  	        'Is_Admin' => 'yes',
+  	    );
 
-          $intro_task = array(
-            'FK_Project_Id' => $new_project_id,
-            'FK_User_Id' => $user_info->id,
-            'Assigned_To' => 'Unassigned',
-            'Group_Name' => 'General',
-            'Task_Name' => 'Intro to Task Management (Click me!)',
-            'Status' => 'Complete',
-            'Description' => '  Welcome to the task management page! From here you can create tasks and assign them to a team member, as well as track its progress and any due dates it may have. This task gives you an idea of the format for a task. New task groups can be added on the "Create Task" page, and groups will automtically be deleted if no tasks remain in a group (tasks can be reassigned to a different group.)
+  	    $this->db->insert('btf2_project_members', $data_member);
+  	    //create general channel
+  	    $data_channel = array(
+  	        'FK_Project_Id' => $new_project_id,
+  	        'Channel_Name' => '#general',
+  	        'Members' => 'a:1:{i:0;s:1:"'.$user_info->id.'";}'
+  	    );
+  	    $this->db->insert('btf2_channels', $data_channel);
+        $intro_task = array(
+          'FK_Project_Id' => $new_project_id,
+          'FK_User_Id' => $user_info->id,
+          'Assigned_To' => 'Unassigned',
+          'Group_Name' => 'General',
+          'Task_Name' => 'Intro to Task Management (Click me!)',
+          'Status' => 'Complete',
+          'Description' => '  Welcome to the task management page! From here you can create tasks and assign them to a team member, as well as track its progress and any due dates it may have. This task gives you an idea of the format for a task. New task groups can be added on the "Create Task" page, and groups will automtically be deleted if no tasks remain in a group (tasks can be reassigned to a different group.)
 
-              If you are the admin of the project, you will have the ability to place tasks in the "Archived" group. This group is for tasks that have been completed or otherwise are no longer active and serves as an easy way to track the history of the project. Tasks should only be placed in the archive group if any work being done on them is completed as placing tasks in this group will strip any assigned users from the task, making further additions to the resource tracker for that task impossible unless it is done by an admin.'
-          );
+            If you are the admin of the project, you will have the ability to place tasks in the "Archived" group. This group is for tasks that have been completed or otherwise are no longer active and serves as an easy way to track the history of the project. Tasks should only be placed in the archive group if any work being done on them is completed as placing tasks in this group will strip any assigned users from the task, making further additions to the resource tracker for that task impossible unless it is done by an admin.'
+        );
         $this->db->insert('btf2_tasks', $intro_task);
         $path = 'project_'.$new_project_id.'/';
         S3::putBucket('btf2_project_'.$new_project_id);
+        $this->m_btf2_users->increment_project_count();
     	}
 
     	else {
@@ -222,6 +223,9 @@ class M_btf2_projects extends CI_Model{
 		//delete the tasks
 		$this->db->where('FK_Project_Id', $project_id);
 		$this->db->delete('btf2_tasks');
+
+    //decrement user's project count
+    $this->m_btf2_users->decrement_project_count();
     }
 
     function remove_team_member($project_id, $user_id)
@@ -299,6 +303,16 @@ class M_btf2_projects extends CI_Model{
         $project_info = $results[0];
       }
       return $project_info;
+    }
+
+    function projects_allowed($user_level)
+    {
+      switch($user_level)
+      {
+        case 0: return 1;
+        case 1: return 3;
+        case 2: return 10;
+      }
     }
 
 }

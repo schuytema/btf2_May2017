@@ -255,7 +255,7 @@ class S3 {
 			$rest->setHeader('Content-Type', 'application/xml');
 		}
 		$rest = $rest->getResponse();
-
+		
 		if ($rest->error === false && $rest->code !== 200)
 			$rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
 		if ($rest->error !== false)

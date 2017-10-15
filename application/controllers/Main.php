@@ -79,6 +79,16 @@ class Main extends CI_Controller {
 		$this->session->unset_userdata('user_info');
 		$this->load->view('main_no_rights');
 	}
+
+	function subscription_details()
+	{
+		$data = array();
+		$data['page'] = 'subscription_details';
+		$data['in_project'] = false;
+		$this->load->view('main_head', $data);
+		$this->load->view('main_subscription_details');
+		$this->load->view('main_foot');
+	}
 	function project_list()
 	{
     if($this->ion_auth->logged_in())
@@ -170,19 +180,27 @@ class Main extends CI_Controller {
 	{
 		if($this->ion_auth->logged_in())
 		{
-	    $data = array();
-	    $data['page'] = 'update_project';
-	    $data['project_id'] = $project_id;
-			$data['in_project'] = false;
-	    if ($project_id != 0)
-	    {
-	    	$data['project_info'] = $this->m_btf2_projects->get_project_info($project_id);
-	    } else {
-	    	$data['project_info'] = NULL;
-	    }
-	    $this->load->view('main_head', $data);
-	  	$this->load->view('main_project_update');
-	  	$this->load->view('main_foot');
+			$user_info = $this->ion_auth->user()->row();
+			$projects_owned = $user_info->projects_owned;
+			$projects_allowed = $this->m_btf2_projects->projects_allowed($user_info->user_level);
+			if($projects_allowed > $projects_owned)
+			{
+		    $data = array();
+		    $data['page'] = 'update_project';
+		    $data['project_id'] = $project_id;
+				$data['in_project'] = false;
+		    if ($project_id != 0)
+		    {
+		    	$data['project_info'] = $this->m_btf2_projects->get_project_info($project_id);
+		    } else {
+		    	$data['project_info'] = NULL;
+		    }
+		    $this->load->view('main_head', $data);
+		  	$this->load->view('main_project_update');
+		  	$this->load->view('main_foot');
+			} else {
+				redirect('main/upgrade_form/all/1');
+			}
 		} else {
 			$uri = $_SERVER['REQUEST_URI'];
 			$pos = strpos($uri, 'main/');
@@ -1045,17 +1063,43 @@ class Main extends CI_Controller {
 		}
 	}
 
-	function upgrade()
+	function upgrade($notify = false)
 	{
 		if($this->ion_auth->logged_in())
 		{
+			$message = isset($_POST['message']) ? $_POST['message'] : "";
+			$new_level = isset($_POST['upgrade_option']) ? $_POST['upgrade_option'] : "";
 			$data = array();
 			$data['page'] = 'upgrade';
 			$data['in_project'] = false;
 			$data['user_info'] = $this->ion_auth->user()->row();
+			$data['message'] = $message;
+			$data['upgrade_option'] = $new_level;
+			$data['notify'] = $notify;
 
 			$this->load->view('main_head', $data);
 			$this->load->view('main_upgrade', $data);
+			$this->load->view('main_foot');
+		} else {
+			$uri = $_SERVER['REQUEST_URI'];
+			$pos = strpos($uri, 'main/');
+			$_SESSION['requested_uri'] = substr($uri,$pos);
+			redirect('auth/login');
+		}
+	}
+
+	function upgrade_form($code = "all", $message = 0)
+	{
+		if($this->ion_auth->logged_in())
+		{
+			$data['page'] = 'upgrade';
+			$data['in_project'] = false;
+			$data['user_info'] = $this->ion_auth->user()->row();
+			$data['code'] = $code;
+			$data['message'] = $message;
+
+			$this->load->view('main_head', $data);
+			$this->load->view('main_upgrade_form', $data);
 			$this->load->view('main_foot');
 		} else {
 			$uri = $_SERVER['REQUEST_URI'];
@@ -1605,6 +1649,17 @@ class Main extends CI_Controller {
 			$_SESSION['requested_uri'] = substr($uri,$pos);
 			redirect('auth/login');
 		}
+	}
+
+	function add_email_for_upgrade_notification()
+	{
+		$email = $_POST['email'];
+		$query = $this->db->query("SELECT email FROM mailing_list_for_upgrade_notifications WHERE email = '$email'");
+		if(!$query->num_rows())
+		{
+			$this->db->query("INSERT INTO mailing_list_for_upgrade_notifications (email) VALUES ('$email')");
+		}
+		redirect('main/upgrade/'.true);
 	}
 
 }

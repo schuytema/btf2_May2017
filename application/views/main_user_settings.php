@@ -52,6 +52,7 @@ function disableText()
     phone_carrier.disabled = true;
     phone_carrier.style.backgroundColor = "#EEEEEE";
   }
+
 }
 </script>
 
@@ -59,10 +60,11 @@ function disableText()
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" <?php echo ($tab == 'account') ? 'class="active"' : ''; ?>><a href="#account" aria-controls="account" role="tab" data-toggle="tab">Account</a></li>
-    <li role="presentation" <?php echo ($tab == 'tags') ? 'class="active"' : ''; ?>><a href="#tags" aria-controls="tags" role="tab" data-toggle="tab">Tags</a></li>
-    <li role="presentation" <?php echo ($tab == 'image') ? 'class="active"' : ''; ?>><a href="#image" aria-controls="image" role="tab" data-toggle="tab">Image</a></li>
-    <li role="presentation"><a href="#password" aria-controls="password" role="tab" data-toggle="tab">Password</a></li>
+    <li role="presentation" <?php echo ($tab == 'account') ? 'class="active"' : ''; ?>><a href="#account" aria-controls="account" role="tab" data-toggle="tab" style="padding:5px;">Account</a></li>
+    <li role="presentation" <?php echo ($tab == 'tags') ? 'class="active"' : ''; ?>><a href="#tags" aria-controls="tags" role="tab" data-toggle="tab" style="padding:5px;">Tags</a></li>
+    <li role="presentation" <?php echo ($tab == 'image') ? 'class="active"' : ''; ?>><a href="#image" aria-controls="image" role="tab" data-toggle="tab" style="padding:5px;">Image</a></li>
+    <li role="presentation"><a href="#password" aria-controls="password" role="tab" data-toggle="tab" style="padding:5px;">Password</a></li>
+    <li role="presentation" <?php echo ($tab == 'upgrade') ? 'class="active"' : ''; ?>><a href="#upgrade" aria-controls="upgrade" role="tab" data-toggle="tab" style="padding:5px;">Account Change</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -72,6 +74,9 @@ function disableText()
     	<form action="<?php echo base_url(); ?>main/update_account" method="post">
     		<fieldset class="form_inner">
     		    <legend>Update Your Account Information</legend>
+            <h4><i>
+              Account Level: <?php $user_level = $this->m_btf2_users->user_level($user_info->id); echo $this->m_btf2_users->convert_level_to_string($user_level);?>
+            </h4></i>
     		    <div class="form-group">
     		    	<label style="text-align=:left" for="first_name">First Name</label>
     		    	<input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $user_info->first_name; ?>" />
@@ -209,7 +214,7 @@ function disableText()
                      <button type="submit" class="btn btn-default">Upload Image</button>
                  </fieldset>
              </form>
-  </div>
+    </div>
     <div role="tabpanel" class="tab-pane" id="password">
     	<h3>Your Password</h3>
     	<form action="<?php echo base_url(); ?>main/update_password" method="post">
@@ -230,8 +235,29 @@ function disableText()
     		</fieldset>
     		<button type="submit" class="btn btn-default">Change Password</button>
     	</form>
-	</div>
-</div> <!-- Tab content -->
+    </div>
+    <div role="tabpanel" class="tab-pane" id="upgrade">
+      <h3>Account Subscription<h3>
+      <h4><i>
+        Account Level: <?php echo $this->m_btf2_users->convert_level_to_string($user_level);?>
+      </h4></i>
+      <form action="<?php echo base_url(); ?>main/upgrade" method="post"><!--verifySelection(<?php echo $user_level;?>);"-->
+        <div class="form-group">
+          <select class="form-control" for="upgrade-option" id="upgrade-option">
+            <option value="0" <?php if($user_level == '0') {echo 'selected';}?>><?php echo $this->m_btf2_users->convert_level_to_string(0);?></option>
+            <option value="1" <?php if($user_level == '1') {echo 'selected';}?>><?php echo $this->m_btf2_users->convert_level_to_string(1);?></option>
+            <option value="2" <?php if($user_level == '2') {echo 'selected';}?>><?php echo $this->m_btf2_users->convert_level_to_string(2);?></option>
+            <option value="-1">Cancel Account</option>
+          </select>
+        </div>
+        <i><p style="color:red;" id="submit-warning"></p></i>
+        <p>The button below will redirect you to the subscription page where you can finalize your subscription change.</p>
+        <button  type="submit" class="btn btn-default" id="submit-upgrade" disabled>Submit</button>
+      </form>
+      </br>
+      <a href="<?php echo base_url().'main/subscription_details';?>">Learn more about Breakthrough Foundry subscription levels</a>
+    </div>
+  </div> <!-- Tab content -->
 </div> <!-- whole tab shebang -->
 <script>
     $("#I_Tag_Text").autocomplete({
@@ -269,6 +295,29 @@ function disableText()
             });
         },
         minLength: 2
+    });
+    $("#upgrade-option").on('change', function(){
+      var currentLevel = <?php echo $user_level;?>;
+      var newLevel = $(this).find('option:selected').val();
+
+      if(newLevel == currentLevel)
+      {
+        $("#submit-warning").text("");
+        $("#submit-upgrade").attr('disabled', true);
+      } else if(newLevel == -1)
+      {
+        var text = 'Are you sure you would like to cancel your subscription? You will lose all your current benefits.';
+        $("#submit-warning").text(text);
+        $("#submit-upgrade").attr('disabled', false);
+      } else if(newLevel < currentLevel) {
+        var text = 'Are you sure you would like to subscripe to a lower level than your current subscription? With a lower level subscription you will lose some of the benefits you currently have.';
+        $("#submit-warning").text(text);
+        $("#submit-upgrade").attr('disabled', false);
+      } else {
+        $("#submit-warning").text("");
+        $("#submit-upgrade").attr('disabled', false);
+      }
+
     });
   </script>
 </div>

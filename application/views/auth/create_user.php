@@ -21,6 +21,13 @@ function disableText()
 
 <div class="starter-template">
   <img src="<?php echo base_url(); ?>img/home_logo_2.png"/>
+  <p style="max-width:700px;margin-left:auto;margin-right:auto;">
+    <em>There is no cost to sign up and explore the revolutionary Breakthrough Foundry.</em>
+    </br>
+    Your free account will allow you to create a profile, create one project and create one interest group. You can always be invited to participate in multiple projects and interests groups at no cost.
+    </br>
+    <a href="<?php echo base_url().'main/subscription_details';?>">Learn more about Breakthrough Foundry subscriptions that give you even more power and flexibility.</a>
+  </p>
   <div style="max-width:400px; margin-left:auto; margin-right:auto; border:1px solid #888; padding:8px">
     <div align="left">
       <h2>Create Account</h2>

@@ -75,6 +75,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         visibility: visible;
       }
 
+      a.navbar-brand span.green{
+        color: #6b9e3d;
+      }
+
+      a.navbar-brand:hover span.green{
+        color: #84e031;
+      }
+
           </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -82,6 +90,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108098845-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-108098845-1');
+    </script>
+
   </head>
 
   <!-- onload="scrollBottom()" is for the chatbox to scrolls to the recent messages automatcally -->
@@ -100,22 +119,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           	<img alt="Breakthrough Foundry" src="<?php echo base_url();?>img/anvil.png">
           </a>
           <a class="navbar-brand" href="<?php echo base_url();?>main/home" id="title">
+            <span class="green">B</span>reakthrough<span class="green">F</span>oundry
             <script>
-              var b = "B".fontcolor("#6b9e3d");
-              var str = b+"reakthrough";
-              b = "F".fontcolor("#6b9e3d");
-              str = str+b+"oundry";
+
+              var a = document.getElementById("title");
+              var str = a.innerHTML;
               if(screen.width <= 500) {
                 str = str.fontsize(2);
               }
-              var a = document.getElementById("title");
               a.innerHTML = str;
             </script>
           </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
         <?php
-        $groups_name = "Interest Groups";
+        $groups_name = "Interest Group";
         if($this->ion_auth->logged_in())
         {
           $user_info = $this->ion_auth->user()->row();
@@ -179,3 +197,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </div>
     </nav>
     <div class="container">
+      <span style="float:left;font-size:10px;color:#777;margin-top:5px;">Beta Version 0.1.1 | Sep 01, 2017</span>
